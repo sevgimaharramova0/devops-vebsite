@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-name: Website - CI/CD Pipeline 
-=======
-name: CI/CD Pipeline - Simple Website
->>>>>>> 68526aae7fe72ce68026fe5263a33cb089f5bda7
+name: Github CI/CD pipeline - vebsite
 
 on:
   push:
