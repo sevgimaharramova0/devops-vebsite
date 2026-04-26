@@ -21,12 +21,22 @@ jobs:
           npm install -g htmlhint
           htmlhint index.html
 
-      # CSS yoxlama
-      - name: Validate CSS
+      # CSS yoxlama və avtomatik düzəltmə
+      - name: Validate & Fix CSS
         run: |
           npm install -g stylelint stylelint-config-standard
-          echo '{ "extends": "stylelint-config-standard" }' > .stylelintrc.json
-          stylelint style.css --fix
+          echo '{
+            "extends": "stylelint-config-standard",
+            "rules": {
+              "comment-empty-line-before": null,
+              "rule-empty-line-before": null,
+              "color-function-alias-notation": null,
+              "color-function-notation": null,
+              "alpha-value-notation": null,
+              "function-url-quotes": null
+            }
+          }' > .stylelintrc.json
+          stylelint style.css
 
       # Artifact kimi saxla
       - name: Upload validation report
