@@ -1,0 +1,65 @@
+<<<<<<< HEAD
+name: Website - CI/CD Pipeline 
+=======
+name: CI/CD Pipeline - Simple Website
+>>>>>>> 68526aae7fe72ce68026fe5263a33cb089f5bda7
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  ci:
+    name: Validate HTML & CSS
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      # Repo-nu götür
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      # HTML yoxlama (lint)
+      - name: Validate HTML
+        run: |
+          npm install -g htmlhint
+          htmlhint index.html
+
+      # CSS yoxlama
+      - name: Validate CSS
+        run: |
+          npm install -g stylelint stylelint-config-standard
+          stylelint style.css
+
+      # Artifact kimi saxla
+      - name: Upload validation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report
+          path: .
+
+  cd:
+    name: Deploy Website
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      # Repo-nu götür
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      # Build step (frontend üçün sadəcə copy)
+      - name: Prepare build folder
+        run: |
+          mkdir -p build
+          cp index.html build/
+          cp style.css build/
+
+      # Deploy (GitHub Pages)
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
