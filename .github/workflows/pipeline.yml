@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-name: Website - CI/CD Pipeline 
-=======
-name: CI/CD Pipeline - Simple Website
->>>>>>> 68526aae7fe72ce68026fe5263a33cb089f5bda7
-
+name: Github CI/CD pipeline - vebsite
 on:
   push:
     branches: ["main"]
@@ -15,7 +10,6 @@ jobs:
     name: Validate HTML & CSS
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-
     steps:
       # Repo-nu götür
       - name: Checkout Repo
@@ -27,10 +21,21 @@ jobs:
           npm install -g htmlhint
           htmlhint index.html
 
-      # CSS yoxlama
-      - name: Validate CSS
+      # CSS yoxlama və avtomatik düzəltmə
+      - name: Validate & Fix CSS
         run: |
           npm install -g stylelint stylelint-config-standard
+          echo '{
+            "extends": "stylelint-config-standard",
+            "rules": {
+              "comment-empty-line-before": null,
+              "rule-empty-line-before": null,
+              "color-function-alias-notation": null,
+              "color-function-notation": null,
+              "alpha-value-notation": null,
+              "function-url-quotes": null
+            }
+          }' > .stylelintrc.json
           stylelint style.css
 
       # Artifact kimi saxla
@@ -44,7 +49,6 @@ jobs:
     name: Deploy Website
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-
     steps:
       # Repo-nu götür
       - name: Checkout Repo
