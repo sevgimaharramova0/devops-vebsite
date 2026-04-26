@@ -26,7 +26,7 @@ jobs:
         run: |
           npm install -g stylelint stylelint-config-standard
           echo '{ "extends": "stylelint-config-standard" }' > .stylelintrc.json
-          stylelint style.css
+          stylelint style.css --fix
 
       # Artifact kimi saxla
       - name: Upload validation report
